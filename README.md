@@ -260,7 +260,8 @@ Commandes pour R1 :
 7.  group 5
 8.  lifetime 1800
 9.  exit
-10. exit
+10. crypto isakmp key cisco-1 address 193.200.200.1 no-xauth
+11. exit
 ```
 
 Commandes pour R2 :
@@ -281,7 +282,8 @@ Commandes pour R2 :
 14. group 5
 15. lifetime 1800
 16. exit
-17. exit
+17. crypto isakmp key cisco-1 address 193.200.200.1 no-xauth
+18. exit
 ```
 Capture R1 : 
 ![](images/Q04_01.png)
@@ -289,7 +291,9 @@ Capture R1 :
 Capture R2 : 
 ![](images/Q04_02.png)
 
-
+- 3DES : N'est plus recommandé. AES est le replacant recommandé.
+- MD5 : N'est plus recommandé. SHA-256 est le replacant recommandé
+- Group : Group 2 (1024-bit) et 5 (1536-bit) ne sont plus recommandés. Le group 14 (2048-bit) serait mieux.
 
 ---
 
@@ -298,7 +302,15 @@ Capture R2 :
 
 ---
 
-**Réponse :**  
+**Réponse :**
+
+R1:
+![](images/Q05_01.png)
+
+R2:
+![](images/Q05_02.png)
+
+C'est n'est pas une bonne idée de stocker la clé en text clair.
 
 ---
 
