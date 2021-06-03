@@ -259,8 +259,10 @@ Commandes pour R1 :
 6.  hash sha
 7.  group 5
 8.  lifetime 1800
-9.  exit
-10. exit
+9. crypto isakmp key cisco-1 address 193.200.200.1 no-xauth
+10. crypto isakmp keepalive 30 3
+11.  exit
+12. exit
 ```
 
 Commandes pour R2 :
@@ -280,8 +282,10 @@ Commandes pour R2 :
 13. hash sha
 14. group 5
 15. lifetime 1800
-16. exit
-17. exit
+16. crypto isakmp key cisco-1 address 193.100.100.1 no-xauth
+17. crypto isakmp keepalive 30 3
+18. exit
+19. exit
 ```
 Capture R1 : 
 ![](images/Q04_01.png)
@@ -289,7 +293,9 @@ Capture R1 :
 Capture R2 : 
 ![](images/Q04_02.png)
 
+La commande `show crypto isakmp policies` permet d'afficher les policies configurées précédemment. On peut voir que notre configuration a fonctionnée. 
 
+On aperçoit également que R2 a deux suite de protection, une en triple DES et l'autre en AES. R1 n'ayant que une suite en AES, ce sera celle-ci qui sera utilisée pour IKE.
 
 ---
 
@@ -299,6 +305,16 @@ Capture R2 :
 ---
 
 **Réponse :**  
+
+Cette commande affiche les clés pré-partagées.
+
+R1 :
+
+![R1_key](images\R1_key.png)
+
+R2 :
+
+![R2_key](images\R2_key.png)
 
 ---
 
@@ -401,6 +417,18 @@ Pensez à démarrer votre sniffer sur la sortie du routeur R2 vers internet avan
 
 **Réponse :**  
 
+IKE utilise deux timers :
+
+le timer `lifetime` détermine le renouvellement Des SA de la phase 1 chaque 30 minutes.
+
+le timer  `keepalive` spécifie le temps en secondes que le routeur attend avant de tester le lien. Ici, ce temps est de 30 secondes et il a 3 essais avant de supprimer les SA.
+
+IPSec utilise également 2 timers : 
+
+le timer `lifetime` change de SA toutes les 5 minutes ou tout les 2.6MB.
+
+le timer `idle-time` détermine le temps maximum d'inactivité avant la suppression des SA. Ici, 15 minutes.  
+
 ---
 
 
@@ -413,16 +441,25 @@ En vous appuyant sur les notions vues en cours et vos observations en laboratoir
 
 ---
 
-**Réponse :**  
+**Réponse :**  Les protocoles IKE et ESP ont été utilisés.
+
+IKE : 
+
+![IKE](C:\Users\Don Peg\Documents\HEIG\SRX\Teaching-HEIGVD-SRX-2021-Labo-VPN\images\IKE.png)
+
+ESP :
+
+ ![r1](images\r1.png)
 
 ---
-
 
 **Question 9: Expliquez si c’est un mode tunnel ou transport.**
 
 ---
 
-**Réponse :**  
+**Réponse :**  Le mode tunnel à été utilisé. Il a été mis en place lors de la configuration d'IPSec sur R2 : 
+
+![mode_tunel](images\mode_tunel.png)
 
 ---
 
@@ -431,7 +468,7 @@ En vous appuyant sur les notions vues en cours et vos observations en laboratoir
 
 ---
 
-**Réponse :**  
+**Réponse :**  Comme vu dans la théorie, le mode tunnel étant utilisé, le paquet entier est chiffré (entête IP, entête TCP et données).
 
 ---
 
@@ -440,7 +477,11 @@ En vous appuyant sur les notions vues en cours et vos observations en laboratoir
 
 ---
 
-**Réponse :**  
+**Réponse :**  Il est également expliqué dans la théorie que, en mode tunnel, tout le paquet est authentifié. L'en-tête ESP sera également authentifiée.
+
+Si l'on effectue la commande `show crypto isakmp policy`, on peut voir que la méthode d'authentification est  SHA-1 (Secure Hash Standard)
+
+![auth_algo](images\auth_algo.png)
 
 ---
 
@@ -449,6 +490,8 @@ En vous appuyant sur les notions vues en cours et vos observations en laboratoir
 
 ---
 
-**Réponse :**  
+**Réponse :**  Comme expliqué dans la théorie, chaque partie authentifiée sera également protégée en intégrité. Cela veut dire que seul la nouvelle en-tête IP ne le sera pas.
+
+L'algorithme est le même que celui utilisé pour l'authentification : SHA-1
 
 ---
