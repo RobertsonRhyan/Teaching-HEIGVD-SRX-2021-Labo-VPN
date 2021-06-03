@@ -463,11 +463,11 @@ En vous appuyant sur les notions vues en cours et vos observations en laboratoir
 
 IKE : 
 
-![IKE](C:\Users\Don Peg\Documents\HEIG\SRX\Teaching-HEIGVD-SRX-2021-Labo-VPN\images\IKE.png)
+![IKE](images/IKE.png)
 
 ESP :
 
- ![r1](images\r1.png)
+ ![r1](images/r1.png)
 
 ---
 
@@ -477,7 +477,7 @@ ESP :
 
 **Réponse :**  Le mode tunnel à été utilisé. Il a été mis en place lors de la configuration d'IPSec sur R2 : 
 
-![mode_tunel](images\mode_tunel.png)
+![mode_tunel](images/mode_tunel.png)
 
 ---
 
@@ -499,7 +499,7 @@ ESP :
 
 Si l'on effectue la commande `show crypto isakmp policy`, on peut voir que la méthode d'authentification est  SHA-1 (Secure Hash Standard)
 
-![auth_algo](images\auth_algo.png)
+![auth_algo](images/auth_algo.png)
 
 ---
 
