@@ -261,7 +261,8 @@ Commandes pour R1 :
 8.  lifetime 1800
 9.  exit
 10. crypto isakmp key cisco-1 address 193.200.200.1 no-xauth
-11. exit
+11. crypto isakmp keepalive 30 3
+12. exit
 ```
 
 Commandes pour R2 :
@@ -283,7 +284,8 @@ Commandes pour R2 :
 15. lifetime 1800
 16. exit
 17. crypto isakmp key cisco-1 address 193.200.200.1 no-xauth
-18. exit
+18. crypto isakmp keepalive 30 3
+19. exit
 ```
 Capture R1 : 
 ![](images/Q04_01.png)
@@ -310,7 +312,7 @@ R1:
 R2:
 ![](images/Q05_02.png)
 
-C'est n'est pas une bonne idée de stocker la clé en text clair.
+C'est n'est pas une bonne idée de stocker la clé en text clair. De plus la clé n'est pas assez compliquée.
 
 ---
 
@@ -403,7 +405,21 @@ Pensez à démarrer votre sniffer sur la sortie du routeur R2 vers internet avan
 
 ---
 
-**Réponse :**  
+**Réponse :** 
+
+Depuis Wireshark, nous pouvons voir que IPSec est bien en mode tunnel car on ne voit pas le vrai header des packet IP. C'est à dire que nous voyons les adresses IP des routers R1(193.100.100.1) et R2(193.200.200.1) plutot que vrais des src (VPCS 172.17.1.100) et dst (Loopback 1 de RX1 172.16.1.1).
+
+![](images/Q06_01.png)
+
+![](images/Q06_02.png)
+
+De plus nous pouvons remarque que les packet sont bien chiffrés grae à ESP :
+![](images/Q06_03.png)
+
+Quelques waring des modifications ipsec security-association :
+- lifetime kilobytes 2560 : Lifetime value of 2560 KB is lower than the recommended optimum value of 102400 KB
+- lifetime seconds 300 : Lifetime value of 300 sec is lower than the recommended optimum value of 900 sec
+
 
 ---
 
