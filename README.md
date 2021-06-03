@@ -30,8 +30,8 @@ Dans ce travail de laboratoire, vous allez configurer des routeurs Cisco émulé
 -	Capture Sniffer avec filtres précis sur la communication à épier
 -	Activation du mode « debug » pour certaines fonctions du routeur
 -	Observation des protocoles IPSec
- 
- 
+
+
 ## Matériel
 
 Le logiciel d'émulation à utiliser c'est eve-ng (vous l'avez déjà employé). Vous trouverez ici un [guide très condensé](files/Manuel_EVE-NG.pdf) pour l'utilisation et l'installation de eve-ng.
@@ -106,7 +106,7 @@ Un « protocol » différent de `up` indique la plupart du temps que l’interfa
 
 ---
 
-**Réponse :**  
+**Réponse :**  Non
 
 ---
 
@@ -143,7 +143,7 @@ Pour votre topologie il est utile de contrôler la connectivité entre :
 
 ---
 
-**Réponse :**  
+**Réponse :**  Oui après avoir fait le dhcp binding sur VPC.
 
 ---
 
@@ -168,6 +168,14 @@ Pour déclencher et pratiquer les captures vous allez « pinger » votre routeur
 
 **Screenshots :**  
 
+Capture Wireshark:
+
+![](images/Q03_01.png)
+
+Messages de R1:
+
+![](images/Q03_02.png)
+
 ---
 
 ## Configuration VPN LAN 2 LAN
@@ -187,6 +195,8 @@ Nous allons établir un VPN IKE/IPsec entre le réseau de votre « loopback 1 »
 ### Configuration IKE
 
 Sur le routeur R1 nous activons un « proposal » IKE. Il s’agit de la configuration utilisée pour la phase 1 du protocole IKE. Le « proposal » utilise les éléments suivants :
+
+
 
 | Element          | Value                                                                                                        |
 |------------------|----------------------------------------------------------------------------------------------------------------------|
@@ -237,7 +247,49 @@ Vous pouvez consulter l’état de votre configuration IKE avec les commandes su
 
 ---
 
-**Réponse :**  
+**Réponse :**
+
+Commandes pour R1 :
+```
+1.  enable
+2.  configure terminal
+3.  crypto isakmp policy 20
+4.  encryption aes 256
+5.  authentication pre-share
+6.  hash sha
+7.  group 5
+8.  lifetime 1800
+9.  exit
+10. exit
+```
+
+Commandes pour R2 :
+```
+1.  enable
+2.  configure terminal
+3.  crypto isakmp policy 10
+4.  encryption 3des
+5.  authentication pre-share
+6.  hash md5
+7.  group 2
+8.  lifetime 1800
+9.  exit
+10. crypto isakmp policy 20
+11. encryption aes 256
+12. authentication pre-share
+13. hash sha
+14. group 5
+15. lifetime 1800
+16. exit
+17. exit
+```
+Capture R1 : 
+![](images/Q04_01.png)
+
+Capture R2 : 
+![](images/Q04_02.png)
+
+
 
 ---
 
